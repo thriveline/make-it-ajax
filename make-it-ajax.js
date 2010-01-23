@@ -1,4 +1,14 @@
 // Need to include jquery before calling this script
+/*
+
+
+$(document).ready(function(){	
+	API.init();
+});
+
+
+*/
+
 API = {
 	
 	divToUpdate: 'test',
@@ -109,7 +119,3 @@ API = {
 	
 
 };
-
-$(document).ready(function(){	
-	API.init();
-});
