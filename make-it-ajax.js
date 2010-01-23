@@ -78,7 +78,7 @@ API = {
 				{
 					parent.show();
 				}
-				API.ajax.init();
+				parent.init();
 			});
 			
 		},
