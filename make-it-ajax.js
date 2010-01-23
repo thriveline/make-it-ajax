@@ -11,18 +11,20 @@ $(document).ready(function(){
 
 API = {
 	
-	divToUpdate: 'test',
+	idsToCheck: new Array('header', 'content'),
+	idToUpdate: 'content',
 	isHidden: false,
 	
 	init: function(){
 		this.ajax.parent = this;
+		this.ajax.init();
 	},
 	
 	view: function(name){
 		updateBox = this.updateBox;
 		parent = this;
 		$.get(name, function(data) {
-			$('#'+parent.divToUpdate).html(data);
+			$('#'+parent.idToUpdate).html(data);
 			if(parent.isHidden)
 			{
 				parent.show();
@@ -36,7 +38,7 @@ API = {
 		if(this.isHidden)
 		{
 			this.isHidden = true;
-			$("#"+this.divToUpdate).addClass('hidden');
+			$("#"+this.idToUpdate).addClass('hidden');
 		}
 	},
 	
@@ -44,7 +46,7 @@ API = {
 		if(!this.isHidden)
 		{
 			this.isHidden = false;
-			$("#"+this.divToUpdate).removeClass('hidden');
+			$("#"+this.idToUpdate).removeClass('hidden');
 		}
 	},
 	
@@ -54,21 +56,24 @@ API = {
 			this.forms();
 		},
 		
-		links: function(){
-			overlaylinks = $('div#'+this.parent.divToUpdate+' a');
-			for(i=0; i<overlaylinks.length; i++)
+		links: function(div){
+			for(h=0; h < this.parent.idsToCheck.length; h++)
 			{
-				$(overlaylinks[i]).click(function(){
-					API.view(this.href);
-					return false;
-				});
+				overlaylinks = $('#'+this.parent.idsToCheck[h]+' a');
+				for(i=0; i<overlaylinks.length; i++)
+				{
+					$(overlaylinks[i]).click(function(){
+						API.view(this.href);
+						return false;
+					});
+				}
 			}
 		},
 		
 		post: function(url, data){
 			parent = this.parent;
 			$.post(url, data, function(output) {
-				$('#'+parent.divToUpdate).html(output);
+				$('#'+parent.idToUpdate).html(output);
 				if(parent.isHidden)
 				{
 					parent.show();
@@ -94,28 +99,26 @@ API = {
 		forms: function(){
 			ajax = this;
 			parent = this.parent;
-			overlaylinks = $('div#'+parent.divToUpdate+' form');
-			for(i=0; i<overlaylinks.length; i++)
+			for(h=0; h < parent.idsToCheck.length; h++)
 			{
-				$(overlaylinks[i]).submit(function(){
-					data = $(this).serialize();
-					
-					if(this.method && this.method.toLowerCase()=='post')
-					{
-						ajax.post(this.action, data);
-					}else{
-						ajax.get(this.action, data);
-					}
-					
-					return false;
-				});
+				overlaylinks = $('#'+parent.idsToCheck[h]+' form');
+				for(i=0; i<overlaylinks.length; i++)
+				{
+					$(overlaylinks[i]).submit(function(){
+						data = $(this).serialize();
+						
+						if(this.method && this.method.toLowerCase()=='post')
+						{
+							ajax.post(this.action, data);
+						}else{
+							ajax.get(this.action, data);
+						}
+						
+						return false;
+					});
+				}
 			}
 		}
-	},
-	
-	showCheckout: function(){
-		this.view('views/checkout.html');
 	}
-	
 
 };
