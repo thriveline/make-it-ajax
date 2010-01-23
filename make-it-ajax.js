@@ -5,7 +5,6 @@ API = {
 	isHidden: false,
 	
 	init: function(){
-		this.movie = getFlashMovieObject('JewelryDesigner');
 		this.ajax.parent = this;
 	},
 	
